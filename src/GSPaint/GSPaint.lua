@@ -28,14 +28,11 @@ Services:GetServices({
     "TextChatService",
     "ProximityPromptService",
     "PathfindingService",
-
     "CoreGui",
     "StarterGui",
-
     "Workspace",
     "Lighting",
     "ReplicatedStorage",
-
     "HttpService",
     "RunService",
     "SoundService",
@@ -140,7 +137,7 @@ require("Utils/GUI/Addons")
 
 shared.Notify:Alert({
     Title = "OUTDATED",
-    Description = "You are using a old version of mspaint that is no longer maintained.\nTo get the new loadstring join the discord!\n -> discord.gg/mspaint <-",
+    Description = "You are using a old version of mspaint that is no longer maintained.\nTo get the new loadstring join the telegramm!\n -> t.me/gspaint <-",
     Time = 30,
     ForceLinoria = true
 })
