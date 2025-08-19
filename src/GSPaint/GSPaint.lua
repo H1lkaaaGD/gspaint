@@ -747,7 +747,10 @@ Script.ESPTable = {
     Door = {},
     Entity = {},
     SideEntity = {},
+    Stardust = {},
+    Points = {},
     Gold = {},
+    Stardust = {},
     Guiding = {},
     DroppedItem = {},
     Item = {},
@@ -832,7 +835,8 @@ Script.FloorImages = {
     ["Retro"] = 16992279648,
     ["Rooms"] = 16874821428,
     ["Fools"] = 17045908353,
-    ["Backdoor"] = 16874352892
+    ["Backdoor"] = 16874352892,
+    ["Garden"] = 16874352892,
 }
 
 Script.EntityTable = {
@@ -944,9 +948,9 @@ Script.HidingPlaceName = {
     ["Backdoor"] = "Closet",
     ["Fools"] = "Closet",
     ["Retro"] = "Closet",
-
     ["Rooms"] = "Locker",
-    ["Mines"] = "Locker"
+    ["Mines"] = "Locker",
+    ["Garden"] = "Toolshed"
 }
 
 Script.CutsceneExclude = {
@@ -1040,6 +1044,7 @@ Script.VoidThresholdValues = {
     ["Rooms"] = 4,
     ["Fools"] = 3,
     ["Backdoor"] = 2,
+    ["Garden"] =3,
 }
 
 Script.MinecartPathNodeColor = {
@@ -1231,6 +1236,7 @@ Script.IsHotel = Script.Floor.Value == "Hotel"
 Script.IsBackdoor = Script.Floor.Value == "Backdoor"
 Script.IsFools = Script.Floor.Value == "Fools"
 Script.IsRetro = Script.Floor.Value == "Retro"
+Script.IsGarden = Script.Floor.Value == "Garden"
 
 Script.FloorReplicated = if not Script.IsFools then shared.ReplicatedStorage:WaitForChild("FloorReplicated") else nil
 Script.RemotesFolder = if not Script.IsFools then shared.ReplicatedStorage:WaitForChild("RemotesFolder") else shared.ReplicatedStorage:WaitForChild("EntityInfo")
@@ -1822,12 +1828,16 @@ shared.Connect:GiveSignal(shared.LocalPlayer:GetAttributeChangedSignal("CurrentR
                 task.spawn(Script.Functions.ChestESP, asset)
             end
 
-            if Toggles.HidingSpotESP.Value and (asset:GetAttribute("LoadModule") == "Wardrobe" or asset:GetAttribute("LoadModule") == "Bed" or asset.Name == "Rooms_Locker" or asset.Name == "RetroWardrobe") then
+            if Toggles.HidingSpotESP.Value and (asset:GetAttribute("LoadModule") == "Wardrobe" or asset:GetAttribute("LoadModule") == "Bed" or asset.Name == "Rooms_Locker" or asset.Name =="Toolsshed" or
+                asset.Name == "RetroWardrobe") then
                 Script.Functions.HidingSpotESP(asset)
             end
 
             if Toggles.GoldESP.Value and asset.Name == "GoldPile" then
                 Script.Functions.GoldESP(asset)
+            end
+            if Toggles.StardustESP.Value and asset.Name == "Stardust" then
+                Script.Functions.Stardust(asset)
             end
         end
     end
@@ -2380,74 +2390,106 @@ local Options = shared.Options
 local Script = shared.Script
 Script.CurrentBadge = 0
 Script.Achievements = {
-    "SurviveWithoutHiding",
-    "SurviveGloombats",
-    "SurviveSeekMinesSecond",
-    "TowerHeroesGoblino",
-    "EscapeBackdoor",
-    "SurviveFiredamp",
-    "CrucifixDread",
-    "EnterRooms",
-    "EncounterVoid",
-    "Join",
-    "DeathAmt100",
-    "UseCrucifix",
-    "EncounterSpider",
-    "SurviveHalt",
-    "SurviveRush",
-    "DeathAmt10",
-    "Revive",
-    "PlayFriend",
-    "SurviveNest",
-    "CrucifixFigure",
-    "CrucifixAmbush",
-    "PlayerBetrayal",
-    "SurviveEyes",
-    "KickGiggle",
-    "EscapeMines",
-    "GlowstickGiggle",
-    "DeathAmt1",
-    "SurviveSeek",
-    "UseRiftMutate",
-    "CrucifixGloombatSwarm",
-    "SurviveScreech",
-    "SurviveDread",
-    "SurviveSeekMinesFirst",
-    "CrucifixHalt",
-    "TowerHeroesVoid",
-    "JoinLSplash",
-    "CrucifixDupe",
-    "EncounterGlitch",
-    "JeffShop",
-    "CrucifixScreech",
-    "SurviveGiggle",
-    "EscapeHotelMod1",
-    "SurviveDupe",
-    "CrucifixRush",
-    "EscapeBackdoorHunt",
-    "EscapeHotel",
-    "CrucifixGiggle",
-    "EscapeFools",
-    "UseRift",
-    "SpecialQATester",
-    "EscapeRetro",
-    "TowerHeroesHard",
-    "EnterBackdoor",
-    "EscapeRooms1000",
-    "EscapeRooms",
-    "EscapeHotelMod2",
-    "EncounterMobble",
-    "CrucifixGrumble",
-    "UseHerbGreen",
-    "CrucifixSeek",
-    "JeffTipFull",
-    "SurviveFigureLibrary",
-    "TowerHeroesHotel",
-    "CrucifixEyes",
-    "BreakerSpeedrun",
-    "SurviveAmbush",
-    "SurviveHide",
-    "JoinAgain"
+      "Join",
+      "JoinAgain",
+      "JoinLSplash",
+      "PlayFriend",
+      "PlayerBetrayal",
+      "Revive",
+      "SurviveWithoutHiding",
+      "DeathAmt1",
+      "DeathAmt10",
+      "DeathAmt100",
+      "SurviveRush",
+      "SurviveSeek",
+      "SurviveScreech",
+      "SurviveDupe",
+      "SurviveEyes",
+      "SurviveHide",
+      "SurviveDread",
+      "SurviveAmbush",
+      "SurviveHalt",
+      "EncounterSpider",
+      "EncounterVoid",
+      "EncounterMobble",
+      "EncounterGlitch",
+      "SurviveGlitchTrial",
+      "SurviveSally",
+      "SurviveFigureLibrary",
+      "JeffShop",
+      "JeffTipFull",
+      "SurviveGloombats",
+      "SurviveGiggle",
+      "KickGiggle",
+      "GlowstickGiggle",
+      "LouieTrade",
+      "UseCrucifix",
+      "CrucifixRush",
+      "CrucifixAmbush",
+      "CrucifixSeek",
+      "CrucifixFigure",
+      "CrucifixEyes",
+      "CrucifixScreech",
+      "CrucifixHalt",
+      "CrucifixDupe",
+      "CrucifixDread",
+      "CrucifixSpider",
+      "CrucifixVoid",
+      "CruvifixHide",
+      "CrucifixA60",
+      "CrucifixA90",
+      "CrucifoxA120",
+      "CrucifixBackdoorRush",
+      "CrucifixLookman",
+      "CrucufixHaste",
+      "CrucifixGloombatSwarm",
+      "CrucifixGiggle",
+      "CrucifixGrumble",
+      "CrucifixQueenGrumble",
+      "CrucifixLouie",
+      "CrucifixSally",
+      "UseHerbGreen",
+      "BreakerSpeedrun",
+      "LockerGenerator",
+      "SurviveFiredamp",
+      "SurvibeNest",
+      "SurviveSeekMinesFirst",
+      "SurviveSeekMinesSecond",
+      "GweenSoda",
+      "UseSkeletonKey",
+      "UseDonut",
+      "FeedCaws",
+      "UseRift",
+      "UseRiftMutate",
+      "EscapeHotel",
+      "EscapeHotelMod1",
+      "EscapeHotelMod2",
+      "EnterGarden",
+      "EscapeGarden",
+      "EnterSubfloor",
+      "GetLotus",
+      "LotusRevive",
+      "EnterRooms",
+      "EscapeRooms",
+      "EscapeRooms1000",
+      "EnterBackdoor",
+      "EscapeBackdoor",
+      "EscapeMines",
+      "EscapeMinesMod1",
+      "EscapeMinesMod2",
+      "EscapeBackdoorHunt",
+      "EscapeFools",
+      "EscapeRetro",
+      "SpecialQATester",
+      "UntitledTagGameCourtyard",
+      "TowerHeroesGoblino",
+      "TowerHeroesHard",
+      "TowerHetoesHotel",
+      "TowerJeroesVoid",
+      "TrickOrTreat2024_100",
+      "TrickOrTreat2024_500",
+      "RankedModeStarter",
+      "RankedModeHardstuckStarter"
 }
 
 Script.RemotesFolder = shared.ReplicatedStorage:WaitForChild("RemotesFolder")
@@ -6660,7 +6702,7 @@ Toggles.HidingSpotESP:OnChanged(function(value)
         local currentRoomModel = workspace.CurrentRooms:FindFirstChild(Script.CurrentRoom)
         if currentRoomModel then
             for _, wardrobe in pairs(currentRoomModel:GetDescendants()) do
-                if wardrobe:GetAttribute("LoadModule") == "Wardrobe" or wardrobe:GetAttribute("LoadModule") == "Bed" or wardrobe.Name == "Rooms_Locker" or wardrobe.Name == "RetroWardrobe" then
+                if wardrobe:GetAttribute("LoadModule") == "Wardrobe" or wardrobe:GetAttribute("LoadModule") == "Bed" or wardrobe.Name == "Rooms_Locker" or wardrobe.Name == "Toolshed" or wardrobe.Name == "RetroWardrobe" then
                     Script.Functions.HidingSpotESP(wardrobe)
                 end
             end
