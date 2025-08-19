@@ -7392,6 +7392,11 @@ local ESPTabBox = Tabs.Visuals:AddLeftTabbox() do
         }):AddColorPicker("EntityEspColor", {
             Default = Color3.new(1, 0, 0),
         })
+        
+        ESPTab:AddToggle("GardenOptmz", {
+            Text = "Garden optmz",
+            Default = false,
+        })
 
         ESPTab:AddToggle("BatteryESP", {
             Text = "Battery",
@@ -7575,6 +7580,20 @@ Toggles.DoorESP:OnChanged(function(value)
 
         for _, esp in pairs(Script.ESPTable.Door) do
             esp.Destroy()
+        end
+    end
+end)
+Toggles.GardenOptmz:OnChanged(function(value)
+    if value then
+        while value do
+            game.workspace:FindFirstChild("Leaves"):Destroy();
+            game.workspace:FindFirstChild("Bush"):Destroy();
+            game.workspace:FindFirstChild("Flowers"):Destroy();
+            game.workspace:FindFirstChild("Seeds"):Destroy();
+            game.workspace:FindFirstChild("Glowe"):Destroy();
+            game.workspace:FindFirstChild("SeedsBag"):Destroy();
+            game.workspace:FindFirstChild("GrassTuft"):Destroy();
+            game.workspace:FindFirstChild("Clouds"):Destroy();
         end
     end
 end)
